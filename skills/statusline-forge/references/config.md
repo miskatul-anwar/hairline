@@ -1,6 +1,6 @@
 # Config format
 
-A config is one JSON object. Every key is optional; omitted keys take defaults. `forge.mjs schema` prints the full JSON Schema; `forge.mjs validate` is the authority.
+A config is one JSON object. Every key is optional; omitted keys take defaults. The allowed values for each key come from the tool: `forge.mjs schema` (full JSON Schema), `forge.mjs segments`, `forge.mjs themes`, `forge.mjs presets`. `forge.mjs validate` has the final say.
 
 ```json
 {
@@ -8,44 +8,23 @@ A config is one JSON object. Every key is optional; omitted keys take defaults. 
   "preset": "dashboard",
   "theme": "glacier",
   "icons": "unicode",
-  "bar": "line",
-  "separator": "dot",
   "thresholds": { "warn": 60, "hot": 80 },
   "colors": { "accent": "#c3a6ff" },
-  "hyperlinks": true,
-  "reserve": 2,
   "lines": [
     ["model", "dir", "git", "pr"],
-    ["context", { "id": "cost", "options": { "budget": 10 } }, "rate_5h"]
+    ["context", { "id": "cost", "options": { "budget": 10 }, "priority": 95 }, "rate_5h"]
   ]
 }
 ```
 
-| Key | Meaning |
-|---|---|
-| `preset` | Starting point (`forge.mjs presets`). Any key you also set overrides it; `lines` replaces the preset's lines entirely. |
-| `theme` | Palette (`forge.mjs themes`). |
-| `icons` | `unicode` (default, any font) · `nerd` (Nerd Font) · `ascii`. |
-| `bar` | `line` · `block` · `dots` · `ascii`. Defaults to `ascii` with ascii icons, else `line`. |
-| `separator` | `dot` · `pipe` · `slash` · `space` · `arrow`, or any literal string such as `" ⋮ "`. |
-| `color` | `auto` (detect; `NO_COLOR` always wins) · `truecolor` · `256` · `16` · `none`. |
-| `thresholds` | Percent at which bars and percentages turn `warn` then `hot`. `warn` ≤ `hot`. |
-| `colors` | Override theme roles with `#rrggbb`. Roles: accent, text, muted, ok, warn, hot, info, branch, dirty. |
-| `hyperlinks` | OSC 8 links on `pr` and `project`. |
-| `reserve` | Columns kept free on the right when fitting to the terminal width. |
-| `cache.gitTtlMs` | How long git state is cached (default 5000). |
-| `lines` | Array of lines; each line is an array of segment entries. |
+## Behaviour the schema can't tell you
 
-## Segment entries
-
-A string (`"cost"`) or an object:
-
-| Field | Meaning |
-|---|---|
-| `id` | Segment id (`forge.mjs segments`). |
-| `options` | Segment-specific options; `forge.mjs segments` lists each one's type and default. |
-| `color` | Theme role or `#rrggbb` for the segment's main text. |
-| `prefix` / `suffix` | Literal text around the segment, e.g. `"["` and `"]"`. |
-| `priority` | 0–100. When the line is too wide, the lowest priority is dropped first (rightmost on ties). |
-
-Segments hide themselves when their data is absent: no rate limits on API billing, no PR, vim mode off. Hiding never leaves a dangling separator, so include anything the user might want.
+- **`preset` merges shallowly.** Any key you set overrides the preset's; `lines` replaces the preset's lines entirely.
+- **`lines`** is an array of lines; each line is an array of entries. An entry is a segment id string, or an object with `id`, `options`, `color`, `prefix`, `suffix`, `priority`.
+- **Absent data hides itself.** No rate limits on API billing, no PR, vim off: those segments vanish without leaving a stray separator. Including a segment "just in case" costs nothing.
+- **Width.** When a line is wider than the terminal (minus `reserve`), the lowest `priority` goes first, rightmost on ties. A segment in its hot zone (≥ `thresholds.hot`) jumps ahead of every calm segment, so the most urgent signal survives longest.
+- **`color` on an entry** repaints the whole segment in one colour, including its amber/red alert states. Use it for identity segments (model, text), not for meters.
+- **`colors`** recolours a theme role everywhere: a cleaner way to add one brand colour.
+- **`bar`** defaults to ASCII when `icons` is `ascii`.
+- **Colour depth** is auto-detected; a non-empty `NO_COLOR` always wins. Hyperlinks (`pr`, `project`) are emitted only when colour is on and `hyperlinks` isn't `false`, so plain-text environments never see escape codes.
+- **`command` segments** run in parallel before rendering, in the session's directory, cached for `ttlMs` and killed (with their whole process tree) after `timeoutMs`. Only the first non-empty output line is shown.

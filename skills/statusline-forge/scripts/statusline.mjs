@@ -45,13 +45,15 @@ async function main() {
   const input = readStdin();
   let out = "";
   try {
-    const [{ render }, { detectColorDepth }, { gitProvider, execProvider }, { resolve }] = await Promise.all([
+    const [{ render }, { detectColorDepth }, { gitProvider, prefetchCommands }, { resolve }] = await Promise.all([
       import("./lib/render.mjs"),
       import("./lib/ansi.mjs"),
       import("./lib/providers.mjs"),
       import("./lib/config.mjs"),
     ]);
     const config = readConfig();
+    const cwd = input?.workspace?.current_dir || input?.cwd || "";
+    const exec = await prefetchCommands(config, cwd);
     const cols = parseInt(process.env.COLUMNS ?? "", 10);
     out = render(input, config, {
       columns: Number.isInteger(cols) && cols > 0 ? cols : undefined,
@@ -59,7 +61,7 @@ async function main() {
       now: Date.now(),
       home: homedir(),
       git: gitProvider({ ttlMs: resolve(config).cache.gitTtlMs }),
-      exec: execProvider(),
+      exec,
     });
   } catch (err) {
     warn(`render failed (${err?.message ?? err})`);

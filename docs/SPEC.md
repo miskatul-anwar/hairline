@@ -55,7 +55,7 @@ A flagship agent skill: the user describes the status line they want in plain la
 
 - **Config-driven engine, not code generation.** The agent writes `config.json` (schema version 1); a bundled runtime renders it. This makes outputs deterministic and testable.
 - **Modules** (all zero-dependency ESM, Node ≥ 18):
-  - *render*: the deep module. `render(input, config, env) → string`. `env` injects `columns`, `colorDepth`, `now`, `git`, `exec`, `cache`. Pure given env.
+  - *render*: the deep module. `render(input, config, env) → string`. `env` injects `columns`, `colorDepth`, `now`, `home`, `git`, `exec`. Pure given env. All untrusted strings (session data, git, command output) are stripped of control characters before rendering.
   - *segments*: registry of segment definitions; each declares `id`, `summary`, `options` (with defaults), `priority`, and `render(ctx) → string | null`. Returning null hides the segment.
   - *themes*: named palettes over semantic roles (`accent, text, muted, ok, warn, hot, info, branch, dirty`), plus colour-depth downgrade (truecolor → 256 → 16 → none).
   - *icons*: three icon sets (`unicode`, `nerd`, `ascii`) keyed by segment.
@@ -63,13 +63,16 @@ A flagship agent skill: the user describes the status line they want in plain la
   - *presets*: named starting configs.
   - *settings*: `install`, `uninstall` against a settings path; backup, refuse-invalid-JSON, idempotent, preserves the previous `statusLine` in a sidecar for restore.
   - *command*: `buildCommand({ platform, execPath, scriptPath })` → shell-safe command for POSIX shells, Git Bash, and PowerShell.
-  - *doctor*: checks returning `{ id, ok, detail, fix }[]`.
+  - *doctor*: checks returning `{ id, ok, level, label, detail, fix }[]`; it runs the installed command through the same shell Claude Code uses (sh; on Windows Git Bash, else PowerShell).
+  - *providers*: git (one `git status --porcelain=v2` call, 800 ms timeout) and `command` segments (run in parallel before rendering, process tree killed on timeout), both cached in `~/.claude/statusline-forge/cache` (mode 0700).
 - **Two entry points**: `statusline.mjs` (runtime: stdin → stdout, always exit 0, last-resort fallback output on internal error) and `forge.mjs` (CLI: `presets`, `segments`, `themes`, `init`, `validate`, `preview`, `install`, `uninstall`, `doctor`).
 - **Stable install location**: `~/.claude/statusline-forge/` holds the copied runtime and `config.json`. `settings.json` points there; the skill folder can move or update freely.
-- **Width fitting**: visible width computed ignoring ANSI/OSC8 escapes and counting East Asian wide chars as 2; when a line exceeds `COLUMNS`, segments are removed lowest-priority first.
-- **Caching**: git and `command` segment results cached in the OS temp dir keyed by a hash of (kind, cwd/command), with configurable TTL (default 5s git, 30s command). Each subprocess has a hard timeout.
-- **Hyperlinks**: OSC 8, opt-out via config `hyperlinks: false`.
-- **Windows command**: first token unquoted (Node path with forward slashes if it has no spaces, else bare `node`), script path quoted with forward slashes — valid in bash, Git Bash and PowerShell.
+- **Width fitting**: visible width computed ignoring escape sequences and counting East Asian wide chars as 2; when a line exceeds `COLUMNS`, segments are removed lowest-priority first, and a segment in its hot zone gets +100 priority so urgent meters survive longest.
+- **Caching**: git and `command` segment results cached in the user's Claude directory (not shared temp) keyed by a hash of (kind, cwd/command), with configurable TTL (default 5s git, 30s command). Each subprocess has a hard timeout.
+- **Hyperlinks**: OSC 8, opt-out via config `hyperlinks: false`; also suppressed when colour is off, so plain-text environments never receive escapes.
+- **Windows command**: first token unquoted (Node path with forward slashes; its 8.3 short form when the long path has spaces; bare `node` only if neither is space-free), script path quoted with forward slashes. Valid in bash, Git Bash and PowerShell.
+- **Settings safety**: one-time backup of the original `settings.json`; atomic writes into a symlink's real target, keeping file permissions; forge's own entry is recognised by the exact runtime path.
+- **Per-segment `color`** repaints the whole segment, including alert colours.
 
 ## Testing Decisions
 
@@ -80,7 +83,7 @@ A flagship agent skill: the user describes the status line they want in plain la
   3. `forge.mjs` as a subprocess against a temp HOME — install/uninstall/validate/doctor behaviour on real files.
   4. `validate()` — error messages for bad configs.
   5. `buildCommand()` — exact strings per platform.
-- Fixtures: realistic stdin payloads (fresh, mid, hot, worktree-pr, api-billing, minimal-null) derived from the documented schema.
+- Fixtures: realistic stdin payloads (fresh, mid, hot, worktree-pr, api-billing, empty) derived from the documented schema. `fresh` covers the null fields of a new session; `empty` (`{}`) renders an empty line, which is correct since there is nothing to show.
 - Prior art: hairline's `node --test` suite.
 - **Evals**: `evals/evals.json` (skill-creator format) for task quality and `evals/trigger-evals.json` for description triggering.
 

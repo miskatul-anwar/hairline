@@ -59,7 +59,7 @@ test("PR is an OSC 8 link unless hyperlinks are disabled", () => {
 });
 
 test("colour depth detection from the environment", () => {
-  assert.equal(detectColorDepth({ NO_COLOR: "", COLORTERM: "truecolor" }), "none");
+  assert.equal(detectColorDepth({ NO_COLOR: "1", COLORTERM: "truecolor" }), "none");
   assert.equal(detectColorDepth({ COLORTERM: "truecolor" }), "truecolor");
   assert.equal(detectColorDepth({ TERM: "xterm-256color" }), "256");
   assert.equal(detectColorDepth({ TERM: "xterm" }), "16");

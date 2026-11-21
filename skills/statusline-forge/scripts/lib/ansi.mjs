@@ -49,7 +49,13 @@ export function paint(style, text, depth) {
 // OSC 8 hyperlink. Terminals without support show the text only.
 export const link = (url, text) => `\x1b]8;;${url}\x07${text}\x1b]8;;\x07`;
 
-export const stripAnsi = (s) => s.replace(/\x1b\]8;;[^\x07]*\x07/g, "").replace(/\x1b\[[0-9;]*m/g, "");
+// Remove every OSC (BEL- or ST-terminated) and CSI sequence, leaving visible text.
+export const stripAnsi = (s) =>
+  s.replace(/\x1b\][^\x07\x1b]*(?:\x07|\x1b\\)/g, "").replace(/\x1b\[[0-?]*[ -/]*[@-~]/g, "");
+
+// Drop C0/C1 control characters from untrusted text (session data, git, command output)
+// so it can never smuggle escape sequences into the terminal.
+export const clean = (s) => s.replace(/[\x00-\x1f\x7f-\x9f]/g, "");
 
 export function parseHex(hex) {
   const m = /^#?([0-9a-f]{6})$/i.exec(hex ?? "");
@@ -60,7 +66,7 @@ export function parseHex(hex) {
 
 // Pick a depth from the environment Claude Code gives the script.
 export function detectColorDepth(e = process.env) {
-  if ("NO_COLOR" in e && e.NO_COLOR !== undefined) return "none";
+  if (e.NO_COLOR) return "none"; // no-color.org: only a non-empty value counts
   if (e.FORCE_COLOR === "0") return "none";
   const ct = (e.COLORTERM ?? "").toLowerCase();
   if (ct === "truecolor" || ct === "24bit") return "truecolor";

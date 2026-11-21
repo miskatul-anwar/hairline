@@ -10,7 +10,7 @@ import { ROLES, THEMES } from "./themes.mjs";
 
 export const SCHEMA_VERSION = 1;
 export const SEPARATORS = { dot: " · ", pipe: " │ ", slash: " / ", space: "  ", arrow: " › " };
-const COLOR_MODES = ["auto", "truecolor", "256", "16", "none"];
+export const COLOR_MODES = ["auto", "truecolor", "256", "16", "none"];
 
 export const DEFAULTS = {
   version: SCHEMA_VERSION,

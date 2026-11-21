@@ -84,8 +84,8 @@ test("command segment runs in the session directory and is cached", () => {
   const cfg = { lines: [[{ id: "command", options: { run: cmd, ttlMs: 60000 } }]] };
   const p = JSON.stringify({ workspace: { current_dir: dir } });
   const tmp = mkdtempSync(join(tmpdir(), "slf-cache-"));
-  const a = run(p, { config: cfg, env: { TMPDIR: tmp } });
-  const b = run(p, { config: cfg, env: { TMPDIR: tmp } });
+  const a = run(p, { config: cfg, env: { HOME: tmp } });
+  const b = run(p, { config: cfg, env: { HOME: tmp } });
   assert.equal(plain(a.stdout), dir);
   assert.equal(plain(b.stdout), dir);
   assert.equal(readFileSync(counter, "utf8").trim().split("\n").length, 1);

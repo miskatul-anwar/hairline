@@ -7,7 +7,7 @@
 | Blank in one project only | Workspace trust not accepted, or that project's `.claude/settings.json` sets its own `statusLine` | Accept the trust dialog; doctor (run from that project) flags the override |
 | Blank everywhere, doctor all ✓ | Managed settings with `allowManagedHooksOnly` or `disableAllHooks` | The user's admin controls this; a managed `statusLine` wins |
 | Blank on Windows | A command with backslashes run under Git Bash | Re-run `install`: it writes forward slashes and a command valid in both Git Bash and PowerShell |
-| `node` not found on Windows | Node installed under a path with spaces and not on PATH | Add Node to PATH, or reinstall Node to a path without spaces, then re-run install |
+| `node` not found on Windows | Node lives under a path with spaces, 8.3 short names are disabled on that drive, and Node isn't on PATH | Add Node to PATH (or install it to a path without spaces), then re-run install. Normally install records the short form, e.g. `C:/PROGRA~1/nodejs/node.exe` |
 | Garbage like `[38;2;…m` | Terminal without truecolor | Set `color: "256"` or `"16"`; the runtime also honours `NO_COLOR` |
 | Boxes / `?` instead of icons | `icons: "nerd"` without a Nerd Font | Switch to `unicode` |
 | PR number not clickable | Terminal without OSC 8 (macOS Terminal.app) or tmux/SSH stripping it | Use iTerm2/WezTerm/Kitty, or `FORCE_HYPERLINK=1 claude`; `hyperlinks: false` hides the escapes entirely |

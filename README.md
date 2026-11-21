@@ -18,7 +18,7 @@ That's the whole setup. The skill turns it into a validated config, shows you th
 | Configure by describing it | – | – | ✓ |
 | Preview before installing | – | some | ✓ five sample sessions |
 | Handles null/absent fields (fresh sessions, API billing, no PR) | usually not | varies | ✓ every segment, tested |
-| Fits narrow terminals by priority | – | rare | ✓ |
+| Fits narrow terminals by priority (urgent meters stay longest) | – | rare | ✓ |
 | Safe install (backup, refuses broken JSON, restores your old line) | – | varies | ✓ |
 | "Why is it blank?" diagnosis | – | – | ✓ `doctor` runs the exact installed command |
 | Windows (Git Bash and PowerShell) | often breaks | varies | ✓ |
@@ -49,7 +49,7 @@ Plus 7 themes (including `paper` for light terminals and `mono`), 3 icon sets (n
 
 Then just ask: *"make me a status line"*.
 
-Requirements: Claude Code, Node.js 18+. Your status line is installed to `~/.claude/statusline-forge/` and runs independently of where the skill lives, so updating or moving the skill can't break it.
+Requirements: Claude Code, Node.js 18+ (macOS, Linux, Windows). Your status line is installed to `~/.claude/statusline-forge/` and runs independently of where the skill lives, so updating or moving the skill can't break it.
 
 ## Under the hood
 

@@ -1,6 +1,12 @@
 // Icon sets. `unicode` needs no special font; `nerd` needs a Nerd Font; `ascii` is safe everywhere.
 // An empty string means "no icon" for that set.
 
+export const ICON_SET_SUMMARIES = {
+  unicode: "No special font needed (default)",
+  nerd: "Requires a Nerd Font",
+  ascii: "Plain ASCII, safe everywhere",
+};
+
 export const ICON_SETS = {
   unicode: {
     model: "◆", effort: "", thinking: "", fast: "", dir: "", project: "", git: "", dirty: "●", staged: "+",

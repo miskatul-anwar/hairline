@@ -2,15 +2,15 @@
 // statusline-forge CLI: design, preview, install and diagnose a Claude Code status line.
 // Run with no arguments for usage.
 
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { detectColorDepth } from "./lib/ansi.mjs";
-import { DEFAULTS, SEPARATORS, validate } from "./lib/config.mjs";
+import { COLOR_MODES, DEFAULTS, SEPARATORS, validate } from "./lib/config.mjs";
 import { diagnose } from "./lib/doctor.mjs";
-import { BAR_STYLES, ICON_SETS } from "./lib/icons.mjs";
+import { BAR_STYLES, ICON_SET_SUMMARIES, ICON_SETS } from "./lib/icons.mjs";
 import { ForgeError, install, paths, SCRIPTS_DIR, uninstall } from "./lib/install.mjs";
 import { PRESETS } from "./lib/presets.mjs";
-import { execProvider } from "./lib/providers.mjs";
+import { prefetchCommands } from "./lib/providers.mjs";
 import { render } from "./lib/render.mjs";
 import { SEGMENTS } from "./lib/segments.mjs";
 import { THEMES } from "./lib/themes.mjs";
@@ -19,6 +19,8 @@ const USAGE = `Usage: forge.mjs <command> [options]
 
 Design
   presets                         List starting-point presets
+  init     [--preset <name>] [--out <file>] [--force]
+                                  Write a starter config to edit (default ./statusline-forge.json)
   segments [--json]               List every segment and its options
   themes                          List colour themes (plus icon sets, bars, separators)
   schema                          Print the JSON Schema for config files
@@ -36,6 +38,7 @@ Install
 Fixtures: fresh, mid, hot, worktree-pr, api-billing, empty`;
 
 const FIXTURES = ["fresh", "mid", "hot", "worktree-pr", "api-billing"];
+const ALL_FIXTURES = [...FIXTURES, "empty"];
 const FIXTURE_NOW = Date.UTC(2026, 0, 1); // fixtures' timestamps are relative to this instant
 
 function parseArgs(argv) {
@@ -133,40 +136,43 @@ function jsonSchema() {
       theme: { enum: Object.keys(THEMES), default: DEFAULTS.theme },
       icons: { enum: Object.keys(ICON_SETS), default: DEFAULTS.icons },
       bar: { enum: Object.keys(BAR_STYLES) },
-      color: { enum: ["auto", "truecolor", "256", "16", "none"], default: "auto" },
-      separator: { type: "string", description: `A literal string or one of: ${Object.keys(SEPARATORS).join(", ")}`, default: "dot" },
-      hyperlinks: { type: "boolean", default: true },
+      color: { enum: COLOR_MODES, default: DEFAULTS.color },
+      separator: { type: "string", description: `A literal string or one of: ${Object.keys(SEPARATORS).join(", ")}`, default: DEFAULTS.separator },
+      hyperlinks: { type: "boolean", default: DEFAULTS.hyperlinks },
       reserve: { type: "integer", minimum: 0, maximum: 40, default: DEFAULTS.reserve },
       thresholds: {
         type: "object",
         additionalProperties: false,
-        properties: { warn: { type: "number", minimum: 0, maximum: 100, default: 60 }, hot: { type: "number", minimum: 0, maximum: 100, default: 80 } },
+        properties: {
+          warn: { type: "number", minimum: 0, maximum: 100, default: DEFAULTS.thresholds.warn },
+          hot: { type: "number", minimum: 0, maximum: 100, default: DEFAULTS.thresholds.hot },
+        },
       },
       colors: { type: "object", additionalProperties: false, properties: Object.fromEntries(Object.keys(THEMES.dusk).filter((k) => k !== "summary").map((k) => [k, { type: "string", pattern: "^#[0-9a-fA-F]{6}$" }])) },
-      cache: { type: "object", additionalProperties: false, properties: { gitTtlMs: { type: "integer", minimum: 0, maximum: 600000, default: 5000 } } },
+      cache: { type: "object", additionalProperties: false, properties: { gitTtlMs: { type: "integer", minimum: 0, maximum: 600000, default: DEFAULTS.cache.gitTtlMs } } },
       lines: { type: "array", minItems: 1, items: { type: "array", items: segEntry } },
     },
   };
 }
 
-function preview(flags) {
+async function preview(flags) {
   const config = requireValid(loadConfig(flags));
   const names = typeof flags.fixture === "string" ? [flags.fixture] : FIXTURES;
+  for (const n of names) if (!ALL_FIXTURES.includes(n)) throw new ForgeError(`unknown fixture "${n}" (available: ${ALL_FIXTURES.join(", ")})`);
   const depth = flags.plain ? "none" : typeof flags.color === "string" ? flags.color : detectColorDepth(process.env);
   const columns = flags.columns ? parseInt(flags.columns, 10) : undefined;
-  const exec = execProvider();
+  const exec = await prefetchCommands(config, process.cwd());
   const pad = Math.max(...names.map((n) => n.length)) + 2;
   const out = [];
   for (const name of names) {
     const file = join(SCRIPTS_DIR, "fixtures", `${name}.json`);
-    if (!existsSync(file)) throw new ForgeError(`unknown fixture "${name}" (available: ${FIXTURES.join(", ")}, empty)`);
     const text = render(readJsonFile(file, "fixture"), config, {
       columns,
       colorDepth: depth,
       now: FIXTURE_NOW,
       home: "/home/user",
       git: () => ({ branch: "main", dirty: true, ahead: 1, behind: 0 }),
-      exec: (cmd, _cwd, o) => exec(cmd, process.cwd(), o),
+      exec: (cmd) => exec(cmd, process.cwd()),
     });
     const rows = (text || "(empty)").split("\n");
     out.push(rows.map((r, i) => (i === 0 ? name.padEnd(pad) : " ".repeat(pad)) + r).join("\n"));
@@ -174,10 +180,23 @@ function preview(flags) {
   return out.join("\n");
 }
 
+function init(flags) {
+  const preset = typeof flags.preset === "string" ? flags.preset : "balanced";
+  if (!PRESETS[preset]) throw new ForgeError(`unknown preset "${preset}" (available: ${Object.keys(PRESETS).join(", ")})`);
+  const out = typeof flags.out === "string" ? flags.out : "statusline-forge.json";
+  if (existsSync(out) && !flags.force) throw new ForgeError(`${out} already exists; pass --force to overwrite it`);
+  const { thresholds, ...rest } = PRESETS[preset].config;
+  const config = { version: 1, theme: DEFAULTS.theme, icons: DEFAULTS.icons, thresholds: { ...DEFAULTS.thresholds, ...thresholds }, ...rest };
+  writeFileSync(out, JSON.stringify(config, null, 2) + "\n");
+  return `wrote ${out} (from preset "${preset}"). Edit it, then: validate --config ${out}`;
+}
+
 function main(argv) {
   const { cmd, flags } = parseArgs(argv);
   const settings = typeof flags.settings === "string" ? flags.settings : undefined;
   switch (cmd) {
+    case "init":
+      return init(flags);
     case "presets":
       return table(Object.entries(PRESETS).map(([k, p]) => [k, p.summary]));
     case "segments": {
@@ -195,7 +214,7 @@ function main(argv) {
         "Themes:",
         table(Object.entries(THEMES).map(([k, t]) => [k, t.summary])),
         "Icon sets:",
-        table([["unicode", "No special font needed (default)"], ["nerd", "Requires a Nerd Font"], ["ascii", "Plain ASCII, safe everywhere"]]),
+        table(Object.entries(ICON_SET_SUMMARIES)),
         "Bars:",
         table(Object.entries(BAR_STYLES).map(([k, [a, b]]) => [k, a.repeat(4) + b.repeat(4)])),
         "Separators:",
@@ -211,8 +230,7 @@ function main(argv) {
       return preview(flags);
     case "install": {
       const config = typeof flags.config === "string" ? requireValid(readJsonFile(flags.config)) : typeof flags.preset === "string" ? requireValid(loadConfig(flags)) : undefined;
-      const refresh = flags.refresh !== undefined ? parseInt(flags.refresh, 10) : undefined;
-      if (refresh !== undefined && !(refresh >= 1)) throw new ForgeError("--refresh must be a whole number of seconds ≥ 1");
+      const refresh = flags.refresh === undefined ? undefined : typeof flags.refresh === "string" ? Number(flags.refresh) : NaN;
       return install({ config, settings, refresh }).messages.join("\n");
     }
     case "uninstall":
@@ -239,10 +257,12 @@ function main(argv) {
 }
 
 try {
-  const out = main(process.argv.slice(2));
+  const out = await main(process.argv.slice(2));
   if (out) process.stdout.write(out + "\n");
 } catch (err) {
-  if (!(err instanceof ForgeError)) throw err;
-  process.stderr.write(`statusline-forge: ${err.message}\n`);
-  process.exitCode = err.code ?? 1;
+  // Expected failures are ForgeErrors; anything else (EACCES, EPERM…) still gets a one-line
+  // message. Set STATUSLINE_FORGE_DEBUG=1 for the stack.
+  if (process.env.STATUSLINE_FORGE_DEBUG) console.error(err);
+  process.stderr.write(`statusline-forge: ${err?.message ?? err}\n`);
+  process.exitCode = err instanceof ForgeError ? err.code ?? 1 : 1;
 }

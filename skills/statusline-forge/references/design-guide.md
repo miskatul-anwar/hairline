@@ -6,7 +6,7 @@ Taste for turning "what I want" into a status line people love glancing at.
 
 - **Line one is orientation**: model, where am I (`dir`, `git`, `worktree`, `pr`). It answers "am I in the right place?"
 - **Pressure comes next**: `context` first (it changes agent quality), then the money the user actually pays: `rate_5h` for subscriptions, `cost` for API, `spend` for gateways.
-- **Footprint is optional**: `duration`, `lines`, `cache`, `version`, `style`, `session`. Offer them; don't default them in.
+- **Footprint is opt-in**: `duration`, `lines`, `cache`, `version`, `style`, `session`. Offer them and add the ones the user picks.
 - Five to seven segments per line is the sweet spot. Past that, move to `dashboard` (two lines) instead of cramming.
 
 ## Colour discipline
@@ -18,13 +18,13 @@ Taste for turning "what I want" into a status line people love glancing at.
 
 ## Width
 
-- Claude Code passes `COLUMNS`; the runtime drops the lowest-priority segments to fit. Raise `priority` on what must survive (often `context` or `cost`) and leave nice-to-haves low.
+- Claude Code passes `COLUMNS`; the runtime drops the lowest-priority segments to fit, and a meter in its hot zone outranks every calm segment automatically. Raise `priority` on what must always survive (often `context` or `cost`) and leave nice-to-haves low.
 - Show `forge.mjs preview --columns 80` to anyone working in split panes.
 - Notifications can share the status row on narrow terminals; `reserve` keeps extra room.
 
 ## Icons
 
-- Unknown font → `unicode`. Never pick `nerd` unless the user confirms a Nerd Font; otherwise they see tofu boxes.
+- Unknown font → `unicode`. Choose `nerd` once the user confirms a Nerd Font is installed; it's the only set that needs one.
 - `ascii` for SSH sessions into minimal hosts and for Windows consoles with legacy fonts.
 
 ## Refresh

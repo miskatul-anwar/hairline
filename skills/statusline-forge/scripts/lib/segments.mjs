@@ -59,7 +59,7 @@ export const SEGMENTS = {
       if (!lvl) return null;
       const roleFor = { low: "muted", medium: "text", high: "info", xhigh: "warn", max: "hot" };
       const label = ctx.o.label ? ctx.c("muted", ctx.o.label + " ") : "";
-      return ctx.ic("effort") + label + ctx.c(ctx.override ?? roleFor[lvl] ?? "text", lvl);
+      return ctx.ic("effort") + label + ctx.c(roleFor[lvl] ?? "text", lvl);
     },
     role: "info",
   },
@@ -157,7 +157,7 @@ export const SEGMENTS = {
       };
       const [role, word] = states[pr.review_state] ?? ["info", ""];
       const num = (pr.kind === "mr" ? "!" : "#") + pr.number;
-      let s = ctx.ic("pr") + ctx.c(ctx.override ?? role, num);
+      let s = ctx.ic("pr") + ctx.c(role, num);
       if (ctx.o.state && word) s += ctx.c("muted", " " + word);
       return pr.url ? ctx.link(pr.url, s) : s;
     },
@@ -215,7 +215,7 @@ export const SEGMENTS = {
       const text = ctx.ic("cost") + fmtUsd(v, ctx.o.decimals);
       if (ctx.o.budget > 0) {
         const pct = Math.round((v / ctx.o.budget) * 100);
-        return ctx.c(ctx.override ?? ctx.level(pct), text) + ctx.c("muted", `/${fmtUsd(ctx.o.budget, 0)}`);
+        return ctx.c(ctx.level(pct), text) + ctx.c("muted", `/${fmtUsd(ctx.o.budget, 0)}`);
       }
       return ctx.base(text);
     },
@@ -318,7 +318,7 @@ export const SEGMENTS = {
       if (!m) return null;
       const role = m === "INSERT" ? "ok" : m.startsWith("VISUAL") ? "warn" : "accent";
       const text = ctx.o.short ? (m === "VISUAL LINE" ? "VL" : m[0]) : m;
-      return ctx.ic("vim") + ctx.c(ctx.override ?? role, text);
+      return ctx.ic("vim") + ctx.c(role, text);
     },
     role: "accent",
   },
