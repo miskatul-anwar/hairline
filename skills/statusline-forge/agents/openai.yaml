@@ -1,0 +1,3 @@
+interface:
+  display_name: "Statusline Forge"
+  short_description: "Design, preview, install and fix a Claude Code status line"

@@ -1,0 +1,20 @@
+[
+  {"query": "make me a cool status line for claude code", "should_trigger": true},
+  {"query": "can you add the context window percentage to the bar at the bottom of claude?", "should_trigger": true},
+  {"query": "my statusline went blank after I updated, help", "should_trigger": true},
+  {"query": "I want to see how close I am to my 5 hour limit while I work in claude code", "should_trigger": true},
+  {"query": "show git branch and PR number in my claude code statusLine", "should_trigger": true},
+  {"query": "restyle my status line, it's too colorful, something muted for a light terminal", "should_trigger": true},
+  {"query": "remove the statusline thing I installed last week", "should_trigger": true},
+  {"query": "how do I track how much this session is costing me as I go? would be nice to always see it", "should_trigger": true},
+  {"query": "set up a two-line status bar with model and cost", "should_trigger": true},
+  {"query": "configure my starship prompt to show the kubernetes context", "should_trigger": false},
+  {"query": "write a bash prompt PS1 that shows the git branch", "should_trigger": false},
+  {"query": "fix the status bar component in my React app, it overlaps the footer", "should_trigger": false},
+  {"query": "set up tmux status-right to show battery and time", "should_trigger": false},
+  {"query": "how much did my Claude API usage cost last month across the org?", "should_trigger": false},
+  {"query": "add a status line to my vim config with lualine", "should_trigger": false},
+  {"query": "what's the HTTP status line format for a 404 response?", "should_trigger": false},
+  {"query": "add a GitHub Actions status badge to the README", "should_trigger": false},
+  {"query": "change the claude code theme to light mode", "should_trigger": false}
+]

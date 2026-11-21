@@ -1,0 +1,73 @@
+{
+  "skill_name": "statusline-forge",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Make me a status line. I'm on the Max plan, dark terminal, no Nerd Font. I mostly care about context and not hitting my limits.",
+      "expected_output": "A validated config using unicode icons with context, rate_5h (and likely rate_7d), previewed, then installed after approval; doctor passes.",
+      "expectations": [
+        "Ran forge.mjs validate on the drafted config and it printed 'config is valid.'",
+        "Showed a forge.mjs preview output to the user before installing",
+        "The config includes the context and rate_5h segments",
+        "The config uses icons 'unicode' (or omits icons), never 'nerd'",
+        "Did not include the cost or spend segment as a primary money signal for a Max subscriber",
+        "Ran forge.mjs install and then forge.mjs doctor"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "I use the API with my own key. I want my statusline to show cost and go red when I pass $5 for the session. Light terminal background.",
+      "expected_output": "Config with the paper theme and a cost segment whose budget is 5.",
+      "expectations": [
+        "The config sets theme to 'paper'",
+        "The config has a cost segment with options.budget equal to 5",
+        "The config passes forge.mjs validate",
+        "The preview was shown to the user"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "my claude code status bar is just blank since yesterday, can you figure out why",
+      "expected_output": "Runs forge.mjs doctor, acts on each failing check's fix, re-runs doctor until it exits 0.",
+      "expectations": [
+        "Ran forge.mjs doctor before changing anything",
+        "Applied the fix printed for each failing check",
+        "Re-ran doctor after fixing and reported the result",
+        "Did not hand-edit settings.json when install could fix it"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Two-line status line please: top line model, folder, branch, PR; bottom line context, cost, 5h usage. Also show my current kubectl context.",
+      "expected_output": "A two-line config with a command segment for kubectl, shown to the user, validated and previewed.",
+      "expectations": [
+        "The config has exactly two lines",
+        "Line one contains model, dir, git and pr in that order",
+        "Line two contains context, cost and rate_5h",
+        "A command segment runs 'kubectl config current-context' with timeoutMs at most 1000",
+        "Told the user the exact command the command segment will run"
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "Change my status line so the warnings kick in at 50% and go red at 70%",
+      "expected_output": "Loads the installed config, sets thresholds warn 50 hot 70, validates, previews, installs.",
+      "expectations": [
+        "Read the existing installed config (via forge.mjs where) instead of starting from scratch",
+        "The resulting config has thresholds.warn 50 and thresholds.hot 70",
+        "Kept the user's existing segments unchanged",
+        "Ran install after the change"
+      ]
+    },
+    {
+      "id": 6,
+      "prompt": "get rid of the custom status line, I want my old one back",
+      "expected_output": "Runs forge.mjs uninstall, which restores the previous statusLine.",
+      "expectations": [
+        "Ran forge.mjs uninstall",
+        "Did not pass --purge unless the user asked to delete the design",
+        "Reported that the previous status line was restored"
+      ]
+    }
+  ]
+}

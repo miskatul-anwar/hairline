@@ -1,0 +1,19 @@
+{
+  "cwd": "/home/user/code/acme-api",
+  "session_id": "hot-0003",
+  "transcript_path": "/tmp/t.jsonl",
+  "model": { "id": "claude-sonnet-5-5", "display_name": "Sonnet 5.5" },
+  "workspace": { "current_dir": "/home/user/code/acme-api/src/auth", "project_dir": "/home/user/code/acme-api", "added_dirs": [] },
+  "version": "2.1.300",
+  "output_style": { "name": "Explanatory" },
+  "cost": { "total_cost_usd": 18.9, "total_duration_ms": 15840000, "total_api_duration_ms": 5100000, "total_lines_added": 2410, "total_lines_removed": 1877 },
+  "context_window": { "total_input_tokens": 182000, "total_output_tokens": 9000, "context_window_size": 200000, "used_percentage": 91, "remaining_percentage": 9, "current_usage": { "input_tokens": 2000, "output_tokens": 9000, "cache_creation_input_tokens": 30000, "cache_read_input_tokens": 150000 } },
+  "exceeds_200k_tokens": false,
+  "prompt_cache": { "warm": false, "caching_observed": true, "ttl": "5m", "expires_at": null, "requests": 80, "misses": 9, "expected_rebuilds": 2, "hit_ratio": 0.62, "cache_write_tokens": 900000, "miss_recache_tokens": 700000, "last_miss_at": 1767225000, "last_miss_cause": { "causes": ["ttl_expired_5m"] }, "miss_causes": { "ttl_expired_5m": 9 }, "recache_tokens_if_cold": 180000 },
+  "fast_mode": true,
+  "effort": { "level": "max" },
+  "thinking": { "enabled": true },
+  "rate_limits": { "five_hour": { "used_percentage": 87.5, "resets_at": 1767227700 }, "seven_day": { "used_percentage": 66, "resets_at": 1767400000 }, "spend_limit": { "used_percentage": 104.2, "resets_at": 1769904000, "used_usd": 521.0, "limit_usd": 500, "period": "monthly" } },
+  "vim": { "mode": "NORMAL" },
+  "agent": { "name": "security-reviewer" }
+}

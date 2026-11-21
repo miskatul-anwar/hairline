@@ -1,0 +1,12 @@
+{
+  "cwd": "C:\\Users\\dev\\work\\shop",
+  "session_id": "api-0005",
+  "transcript_path": "C:\\tmp\\t.jsonl",
+  "model": { "id": "claude-haiku-5-5", "display_name": "Haiku 5.5" },
+  "workspace": { "current_dir": "C:\\Users\\dev\\work\\shop", "project_dir": "C:\\Users\\dev\\work\\shop", "added_dirs": [] },
+  "version": "2.1.300",
+  "output_style": { "name": "default" },
+  "cost": { "total_cost_usd": 0.0421, "total_duration_ms": 95000, "total_api_duration_ms": 30000, "total_lines_added": 3, "total_lines_removed": 0 },
+  "context_window": { "total_input_tokens": 12000, "total_output_tokens": 800, "context_window_size": 200000, "used_percentage": 6, "remaining_percentage": 94, "current_usage": { "input_tokens": 12000, "output_tokens": 800, "cache_creation_input_tokens": 0, "cache_read_input_tokens": 0 } },
+  "exceeds_200k_tokens": false
+}

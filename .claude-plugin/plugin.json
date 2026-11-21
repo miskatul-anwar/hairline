@@ -1,0 +1,9 @@
+{
+  "name": "statusline-forge",
+  "version": "1.0.0",
+  "description": "Describe the Claude Code status line you want; the agent designs it, previews it against realistic sessions, installs it safely, and fixes it if it ever goes blank.",
+  "author": { "name": "Miskatul Anwar", "url": "https://github.com/miskatul-anwar" },
+  "license": "SEE LICENSE IN LICENSE",
+  "keywords": ["statusline", "status-line", "claude-code", "context", "rate-limits", "cost", "git", "customization"],
+  "skills": ["./skills/statusline-forge"]
+}
