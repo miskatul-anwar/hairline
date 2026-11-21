@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1d1f2b"/>
+      <stop offset="1" stop-color="#11121a"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.62" r="0.5">
+      <stop offset="0" stop-color="#ebbe78" stop-opacity="0.28"/>
+      <stop offset="1" stop-color="#ebbe78" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1024" height="1024" rx="224" fill="url(#bg)"/>
+  <rect width="1024" height="1024" rx="224" fill="url(#glow)"/>
+  <!-- the status line: segments of a bar -->
+  <rect x="168" y="604" width="200" height="72" rx="36" fill="#b4a7ff"/>
+  <rect x="404" y="604" width="140" height="72" rx="36" fill="#7dc8be"/>
+  <rect x="580" y="604" width="276" height="72" rx="36" fill="#2b2e3d"/>
+  <rect x="580" y="604" width="168" height="72" rx="36" fill="#ebbe78"/>
+  <!-- forge spark rising off the bar -->
+  <path d="M664 230 L700 400 L860 436 L700 472 L664 560 L628 472 L468 436 L628 400 Z" fill="#ebbe78"/>
+  <circle cx="420" cy="320" r="22" fill="#f07882"/>
+  <circle cx="820" cy="280" r="16" fill="#82c896"/>
+</svg>

@@ -1,0 +1,19 @@
+{
+  "cwd": "/home/user/code/acme-api",
+  "session_id": "mid-0002",
+  "session_name": "refactor auth",
+  "prompt_id": "550e8400-e29b-41d4-a716-446655440000",
+  "transcript_path": "/tmp/t.jsonl",
+  "model": { "id": "claude-opus-5-5", "display_name": "Opus 5.5" },
+  "workspace": { "current_dir": "/home/user/code/acme-api", "project_dir": "/home/user/code/acme-api", "added_dirs": [], "repo": { "host": "github.com", "owner": "acme", "name": "acme-api" } },
+  "version": "2.1.300",
+  "output_style": { "name": "default" },
+  "cost": { "total_cost_usd": 1.2345, "total_duration_ms": 2723000, "total_api_duration_ms": 412000, "total_lines_added": 156, "total_lines_removed": 23 },
+  "context_window": { "total_input_tokens": 84000, "total_output_tokens": 2100, "context_window_size": 200000, "used_percentage": 42, "remaining_percentage": 58, "current_usage": { "input_tokens": 4000, "output_tokens": 2100, "cache_creation_input_tokens": 10000, "cache_read_input_tokens": 70000 } },
+  "exceeds_200k_tokens": false,
+  "prompt_cache": { "warm": true, "caching_observed": true, "ttl": "1h", "expires_at": 1767229200, "requests": 14, "misses": 2, "expected_rebuilds": 1, "hit_ratio": 0.91, "cache_write_tokens": 352000, "miss_recache_tokens": 310200, "last_miss_at": 1767225000, "last_miss_cause": null, "miss_causes": {}, "recache_tokens_if_cold": 45000 },
+  "fast_mode": false,
+  "effort": { "level": "high" },
+  "thinking": { "enabled": true },
+  "rate_limits": { "five_hour": { "used_percentage": 31, "resets_at": 1767233640 }, "seven_day": { "used_percentage": 12.4, "resets_at": 1767744000 } }
+}

@@ -1,0 +1,14 @@
+{
+  "name": "statusline-forge",
+  "owner": { "name": "Miskatul Anwar", "url": "https://github.com/miskatul-anwar" },
+  "metadata": { "description": "statusline-forge: a status line designer skill for Claude Code", "version": "1.0.0" },
+  "plugins": [
+    {
+      "name": "statusline-forge",
+      "source": "./",
+      "description": "Design, preview, install and debug a custom Claude Code status line in plain language. 25 segments, 7 themes, 5 presets, zero dependencies.",
+      "category": "productivity",
+      "tags": ["statusline", "customization", "context", "usage", "cost"]
+    }
+  ]
+}

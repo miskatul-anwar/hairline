@@ -1,0 +1,19 @@
+{
+  "cwd": "/home/user/code/acme-api/.claude/worktrees/oauth",
+  "session_id": "wt-0004",
+  "session_name": "oauth flow",
+  "transcript_path": "/tmp/t.jsonl",
+  "model": { "id": "claude-opus-5-5", "display_name": "Opus 5.5" },
+  "workspace": { "current_dir": "/home/user/code/acme-api/.claude/worktrees/oauth", "project_dir": "/home/user/code/acme-api", "added_dirs": [], "git_worktree": "oauth", "repo": { "host": "github.com", "owner": "acme", "name": "acme-api" } },
+  "version": "2.1.300",
+  "output_style": { "name": "default" },
+  "cost": { "total_cost_usd": 3.5, "total_duration_ms": 600000, "total_api_duration_ms": 200000, "total_lines_added": 40, "total_lines_removed": 2 },
+  "context_window": { "total_input_tokens": 230000, "total_output_tokens": 4000, "context_window_size": 1000000, "used_percentage": 23, "remaining_percentage": 77, "current_usage": { "input_tokens": 1000, "output_tokens": 4000, "cache_creation_input_tokens": 9000, "cache_read_input_tokens": 220000 } },
+  "exceeds_200k_tokens": true,
+  "fast_mode": false,
+  "effort": { "level": "medium" },
+  "thinking": { "enabled": false },
+  "rate_limits": { "five_hour": { "used_percentage": 64, "resets_at": 1767230000 } },
+  "pr": { "number": 1234, "url": "https://github.com/acme/acme-api/pull/1234", "review_state": "changes_requested" },
+  "worktree": { "name": "oauth", "path": "/home/user/code/acme-api/.claude/worktrees/oauth", "branch": "worktree-oauth", "original_cwd": "/home/user/code/acme-api", "original_branch": "main" }
+}

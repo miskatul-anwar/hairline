@@ -5,7 +5,7 @@
     "url": "https://github.com/miskatul-anwar"
   },
   "metadata": {
-    "description": "A minimal, muted one-line status line for Claude Code",
+    "description": "hairline (free status line) and statusline-forge (status line designer skill) for Claude Code",
     "version": "0.1.0"
   },
   "plugins": [
@@ -14,7 +14,25 @@
       "source": "./",
       "description": "A minimal, muted one-line status line: model, path, git, context and session usage bars, cost and reset countdown. No dependencies, no Nerd Font needed.",
       "category": "productivity",
-      "tags": ["statusline", "minimal", "context", "usage"]
+      "tags": [
+        "statusline",
+        "minimal",
+        "context",
+        "usage"
+      ]
+    },
+    {
+      "name": "statusline-forge",
+      "source": "./statusline-forge",
+      "description": "Design, preview, install and debug a custom Claude Code status line in plain language. 25 segments, 7 themes, 5 presets, zero dependencies.",
+      "category": "productivity",
+      "tags": [
+        "statusline",
+        "customization",
+        "context",
+        "usage",
+        "cost"
+      ]
     }
   ]
 }

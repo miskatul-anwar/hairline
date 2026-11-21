@@ -64,3 +64,7 @@ npm test
 ## License
 
 MIT
+
+## statusline-forge
+
+Want your own design instead? [`statusline-forge/`](statusline-forge/) is a separate plugin: a status line designer skill where you describe the line you want and the agent builds, previews, installs and debugs it. It is **not** covered by this repository's MIT licence; it has its own commercial licence in [`statusline-forge/LICENSE`](statusline-forge/LICENSE).

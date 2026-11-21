@@ -1,0 +1,16 @@
+{
+  "name": "statusline-forge",
+  "version": "1.0.0",
+  "description": "Design, preview, install and debug a custom Claude Code status line by describing it in plain language",
+  "type": "module",
+  "private": true,
+  "license": "SEE LICENSE IN LICENSE",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "test": "node --test test/*.test.mjs",
+    "package": "node tools/package.mjs",
+    "lint": "node --check skills/statusline-forge/scripts/forge.mjs && node --check skills/statusline-forge/scripts/statusline.mjs && for f in skills/statusline-forge/scripts/lib/*.mjs; do node --check $f; done"
+  }
+}
