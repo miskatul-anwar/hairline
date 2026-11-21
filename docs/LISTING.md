@@ -39,11 +39,14 @@ Your agent turns that into a validated design, shows you the result across five 
 - The `git` segment runs `git status` with an 800 ms timeout. The optional `command` segment runs a shell command that **the user** writes in their own config. The skill tells the agent to add one only on request and to show the user the exact command.
 - No network access, no telemetry, no dependencies.
 
-## Screenshots to capture
-1. Terminal: `forge.mjs preview --preset dashboard` in colour (dusk theme)
-2. The same at `--columns 80`, showing priority trimming
-3. A Claude Code chat: "make me a status line…" → preview → approved → live status line
-4. `forge.mjs doctor` output
+## Screenshots (docs/screenshots; regenerate with `node tools/screenshots.mjs`)
+1. `1-preview-dashboard.png`: the two-line dashboard across five sample sessions
+2. `2-narrow-terminal.png`: the same hot session at full width and at 80 columns; urgent meters survive
+3. `3-doctor.png`: doctor on a healthy install
+4. `4-themes.png`: one session in six dark themes
+5. `5-theme-paper.png`: the light-terminal theme
+
+Still to capture by hand: a real Claude Code chat ("make me a status line…" → preview → approved → live line). It has to be a genuine session.
 
 ## Funnel
 hairline (free, MIT) README → "Want your own design? statusline-forge" → this listing (with your affiliate link).
