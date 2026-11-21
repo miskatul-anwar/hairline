@@ -26,11 +26,11 @@ Your agent turns that into a validated design, shows you the result across five 
 **What you get**
 - 25 segments: model, effort, thinking, fast mode, directory, repo, git (branch, dirty, ahead/behind), worktree, PR (clickable, coloured by review state), context (bar, %, tokens, 200k warning), 5h / 7d limits with reset countdowns, gateway spend, session cost with a budget, prompt-cache warm/cold, duration, lines changed, vim mode, agent, output style, session name, version, clock, static text, and your own shell commands
 - 7 themes (including a light-terminal theme and a monochrome one), 3 icon sets (no Nerd Font required), 4 bar styles, 5 presets, 1–N lines
-- Fits narrow terminals by dropping the least important segments first
+- Fits narrow terminals by dropping the least important segments first, while urgent (red) meters stay longest
 - Safe install: backs up settings.json, refuses to touch broken JSON, idempotent, and gives you your old status line back on uninstall
 - `doctor`: explains why a status line is blank by running the exact installed command
 - Windows-ready: works under both Git Bash and PowerShell
-- Zero dependencies: only Node.js 18+. 70 automated tests.
+- Zero dependencies: only Node.js 18+. 87 automated tests.
 
 **Works with:** Claude Code (the status line is a Claude Code feature). The skill is a standard SKILL.md folder.
 
