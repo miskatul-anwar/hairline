@@ -1,0 +1,13 @@
+{
+  "name": "hairline",
+  "description": "A minimal, muted one-line status line for Claude Code: model, path, git, context and session usage bars, cost and reset countdown",
+  "version": "0.1.0",
+  "author": {
+    "name": "Miskatul Anwar",
+    "url": "https://github.com/miskatul-anwar"
+  },
+  "homepage": "https://github.com/miskatul-anwar/hairline",
+  "repository": "https://github.com/miskatul-anwar/hairline",
+  "license": "MIT",
+  "keywords": ["statusline", "status-line", "minimal", "context", "usage", "claude-code"]
+}

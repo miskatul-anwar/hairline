@@ -1,0 +1,20 @@
+{
+  "name": "hairline",
+  "owner": {
+    "name": "Miskatul Anwar",
+    "url": "https://github.com/miskatul-anwar"
+  },
+  "metadata": {
+    "description": "A minimal, muted one-line status line for Claude Code",
+    "version": "0.1.0"
+  },
+  "plugins": [
+    {
+      "name": "hairline",
+      "source": "./",
+      "description": "A minimal, muted one-line status line: model, path, git, context and session usage bars, cost and reset countdown. No dependencies, no Nerd Font needed.",
+      "category": "productivity",
+      "tags": ["statusline", "minimal", "context", "usage"]
+    }
+  ]
+}
